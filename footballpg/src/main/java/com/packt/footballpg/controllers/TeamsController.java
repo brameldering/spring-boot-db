@@ -1,6 +1,6 @@
 package com.packt.footballpg.controllers;
 
-import com.packt.footballpg.entities.Team;
+import com.packt.footballpg.records.Team;
 import com.packt.footballpg.services.TeamsService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

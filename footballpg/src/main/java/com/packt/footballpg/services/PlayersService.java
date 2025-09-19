@@ -1,6 +1,6 @@
 package com.packt.footballpg.services;
 
-import com.packt.footballpg.entities.Player;
+import com.packt.footballpg.records.Player;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Service;

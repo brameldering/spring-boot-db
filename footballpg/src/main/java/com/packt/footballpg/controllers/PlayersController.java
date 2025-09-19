@@ -1,6 +1,6 @@
 package com.packt.footballpg.controllers;
 
-import com.packt.footballpg.entities.Player;
+import com.packt.footballpg.records.Player;
 import com.packt.footballpg.services.PlayersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;

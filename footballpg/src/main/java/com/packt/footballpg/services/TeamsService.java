@@ -1,6 +1,6 @@
 package com.packt.footballpg.services;
 
-import com.packt.footballpg.entities.Team;
+import com.packt.footballpg.records.Team;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 

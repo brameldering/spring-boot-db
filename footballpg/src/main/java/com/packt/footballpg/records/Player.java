@@ -1,4 +1,4 @@
-package com.packt.footballpg.entities;
+package com.packt.footballpg.records;
 
 import java.time.LocalDate;
 

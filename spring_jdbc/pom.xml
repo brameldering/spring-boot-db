@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.packt</groupId>
-	<artifactId>footballpg</artifactId>
+	<artifactId>spring_jdbc</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>footballpg</name>
 	<description>Demo project for Spring Boot</description>

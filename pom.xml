@@ -11,7 +11,8 @@
     <description>A root POM for a multi-module project with Spring Boot database examples.</description>
 
     <modules>
-        <module>footballpg</module>
+        <module>spring_jdbc</module>
+        <module>spring_orm</module>
     </modules>
 
     <properties>

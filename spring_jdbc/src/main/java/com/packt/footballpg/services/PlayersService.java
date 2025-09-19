@@ -6,6 +6,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PlayersService {
@@ -23,7 +24,7 @@ public class PlayersService {
     return jdbcClient.sql("SELECT * FROM players WHERE id = :id").param("id", id).query(Player.class).single();
   }
 
-  public void createPlayer(Player player) {
+  public Player createPlayer(Player player) {
     GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
     jdbcClient.sql("""
             INSERT INTO players (jersey_number, name, position, date_of_birth, team_id) VALUES (:jersey_number, :name, :position, :date_of_birth, :team_id)
@@ -34,10 +35,10 @@ public class PlayersService {
         .param("team_id", player.teamId())
         .update(keyHolder, "id");
 
-        // Potentially extend with returning a new object corresponding to created player
-        // update(keyHolder, "id");
-        // createdPlayer.setId(KeyHolder.getKey().intValue());
-        // return createdPlayer;
+    long generatedKey = Optional.ofNullable(keyHolder.getKey())
+        .map(Number::longValue)
+        .orElseThrow(() -> new IllegalStateException("Failed to retrieve generated key for Player."));
+    return new Player(generatedKey, player.jerseyNumber(), player.name(), player.position(), player.dateOfBirth(), player.teamId());
   }
 
 }

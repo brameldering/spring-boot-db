@@ -20,8 +20,8 @@ public class TeamsService {
         .orElse(0);
   }
 
-  public Team getTeamById(int id) {
-    return jdbcTemplate.queryForObject("SELECT * FROM teams WHERE id = ?", (rs, rowNum) -> new Team(rs.getInt("id"), rs.getString("name")), id);
+  public Team getTeamById(Long id) {
+    return jdbcTemplate.queryForObject("SELECT * FROM teams WHERE id = ?", (rs, rowNum) -> new Team(rs.getLong("id"), rs.getString("name")), id);
   }
 
 //  public List<Team> getAllTeams() {
@@ -29,7 +29,7 @@ public class TeamsService {
 //  }
 
   public List<Team> getTeamsExplicitly() {
-    return jdbcTemplate.query("SELECT * FROM teams ORDER BY name", (rs, rowNum) -> new Team(rs.getInt("id"), rs.getString("name")));
+    return jdbcTemplate.query("SELECT * FROM teams ORDER BY name", (rs, rowNum) -> new Team(rs.getLong("id"), rs.getString("name")));
    }
 
 }

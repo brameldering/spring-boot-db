@@ -23,7 +23,7 @@ public class FootballService {
   }
 
   public List<Player> searchPlayers(String name) {
-    return playerRepository.findByName(name).stream()
+    return playerRepository.findByNameContainingIgnoreCase(name).stream()
         .map(player -> new Player(player.getName(), player.getJerseyNumber(), player.getPosition(), player.getDateOfBirth())).toList();
   }
 

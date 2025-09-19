@@ -4,9 +4,10 @@ import com.packt.spring_orm.entities.PlayerEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 
 public interface PlayerRepository extends JpaRepository<PlayerEntity, Long> {
-  List<PlayerEntity> findByName(String name);
+  List<PlayerEntity> findByNameContainingIgnoreCase(String name);
   List<PlayerEntity> findByDateOfBirth(LocalDate dateOfBirth);
 }

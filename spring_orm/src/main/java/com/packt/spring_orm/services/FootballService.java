@@ -47,9 +47,21 @@ public class FootballService {
     return playerRepository.findByDateOfBirth(dateOfBirth).stream().map(player -> new Player(player.getName(), player.getJerseyNumber(), player.getPosition(), player.getDateOfBirth())).toList();
   }
 
-//  public List<Team> getTeams() {
-//    return teamRepository.getTeams().stream().map(team -> new Team(team.getId(),team.getName() LIST).toList();
-//  }
+  public List<Team> getAllTeams() {
+    return teamRepository.findAllWithPlayers().stream()
+        .map(teamEntity -> new Team(
+            teamEntity.getId(),
+            teamEntity.getName(),
+            teamEntity.getPlayers().stream()
+                .map(player -> new Player(
+                    player.getName(),
+                    player.getJerseyNumber(),
+                    player.getPosition(),
+                    player.getDateOfBirth()))
+                .toList()))
+        .toList();
+  }
+
 
 //  @Transactional(readOnly = true)
   public Team getTeam(Long id) {

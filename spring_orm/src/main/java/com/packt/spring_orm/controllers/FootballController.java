@@ -20,6 +20,11 @@ public class FootballController {
     this.footballService = footballService;
   }
 
+  @GetMapping("/teams")
+  public List<Team> getTeams() {
+    return footballService.getAllTeams();
+  }
+
   @GetMapping("/teams/{id}")
   public Team getTeam(@PathVariable Long id) {
     return footballService.getTeam(id);
@@ -30,6 +35,11 @@ public class FootballController {
     return footballService.getTeamPlayers(id);
   }
 
+  @PostMapping("/teams")
+  public Team createTeam(@RequestBody String name) {
+    return footballService.createTeam(name);
+  }
+
   @GetMapping("/players")
   public List<Player> searchPlayers(@RequestParam String name) {
     return footballService.searchPlayers(name);
@@ -38,11 +48,6 @@ public class FootballController {
   @GetMapping("/players/birth/{date}")
   public List<Player> searchPlayersByBirthDate(@PathVariable LocalDate date) {
     return footballService.searchPlayersByDOB(date);
-  }
-
-  @PostMapping("/teams")
-  public Team createTeam(@RequestBody String name) {
-    return footballService.createTeam(name);
   }
 
   @PutMapping("/player/{id}/position")

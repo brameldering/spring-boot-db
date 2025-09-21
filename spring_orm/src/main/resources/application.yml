@@ -1,15 +1,15 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/football2
+    url: jdbc:postgresql://localhost:5432/football3
     username: packt
     password: packt
   jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
+# no longer needed: database-platform: org.hibernate.dialect.PostgreSQLDialect
     # Best to always use open-in-view: false
     open-in-view: false
-    hibernate:
-      ddl-auto: create-drop
-    defer-datasource-initialization: true
-  sql:
-    init:
-      mode: always
+#    hibernate:
+#      ddl-auto: create-drop
+#    defer-datasource-initialization: true
+#  sql:
+#    init:
+#      mode: always

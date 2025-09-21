@@ -22,6 +22,8 @@ public class PlayerEntity {
   private String name;
   private String position;
   private LocalDate dateOfBirth;
+  private Integer height;
+  private Integer weight;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "team_id")

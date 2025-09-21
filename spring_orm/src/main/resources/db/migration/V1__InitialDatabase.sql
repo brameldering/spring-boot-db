@@ -1,3 +1,17 @@
+CREATE TABLE teams (
+                       id SERIAL PRIMARY KEY,
+                       name VARCHAR(255)
+);
+
+CREATE TABLE players (
+                         id SERIAL PRIMARY KEY,
+                         jersey_number INT,
+                         name VARCHAR(255),
+                         position VARCHAR(255),
+                         date_of_birth DATE,
+                         team_id INT REFERENCES teams(id)
+);
+
 INSERT INTO teams(id, name) VALUES (1884881, 'Argentina');
 INSERT INTO players(id, jersey_number, name, "position", date_of_birth, team_id)
 VALUES

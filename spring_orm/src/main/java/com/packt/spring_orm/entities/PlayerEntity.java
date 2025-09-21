@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Table(name="players")
 @Entity
@@ -28,4 +29,7 @@ public class PlayerEntity {
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "team_id")
   private TeamEntity team;
+
+  @OneToMany(cascade = CascadeType.ALL, mappedBy = "player")
+  private List<CardEntity> cards;
 }

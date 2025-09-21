@@ -6,23 +6,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
-@Table(name = "teams")
 @Entity
+@Table(name = "cards")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TeamEntity {
+public class CardEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  private String name;
 
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "team")
-  private List<PlayerEntity> players;
+  @ManyToOne
+  @JoinColumn(name = "album_id")
+  private AlbumEntity album;
 
-  @OneToMany
-  private List<MatchEntity> matches;
+  @ManyToOne
+  @JoinColumn(name = "player_id")
+  private PlayerEntity player;
+
 }

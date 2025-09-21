@@ -18,6 +18,7 @@ public class MatchEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
+
   private LocalDate matchDate;
 
   @ManyToOne

@@ -6,23 +6,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.List;
 
-@Table(name = "teams")
 @Entity
+@Table(name = "albums")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class TeamEntity {
+public class AlbumEntity {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
-  private String name;
 
-  @OneToMany(cascade = CascadeType.ALL, mappedBy = "team")
-  private List<PlayerEntity> players;
+  private String title;
+  private LocalDate expireDate;
 
   @OneToMany
-  private List<MatchEntity> matches;
+  private List<CardEntity> cards;
+
 }

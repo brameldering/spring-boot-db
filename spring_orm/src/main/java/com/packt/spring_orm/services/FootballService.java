@@ -1,7 +1,11 @@
 package com.packt.spring_orm.services;
 
+import com.packt.spring_orm.entities.MatchEntity;
+import com.packt.spring_orm.entities.MatchEventEntity;
 import com.packt.spring_orm.entities.PlayerEntity;
 import com.packt.spring_orm.entities.TeamEntity;
+import com.packt.spring_orm.records.Match;
+import com.packt.spring_orm.records.MatchEvent;
 import com.packt.spring_orm.records.Player;
 import com.packt.spring_orm.records.Team;
 import com.packt.spring_orm.repositories.*;
@@ -22,12 +26,14 @@ public class FootballService {
   private final TeamRepository teamRepository;
   private MatchRepository matchRepository;
   private AlbumRepository albumRepository;
+  private MatchEventRepository matchEventRepository;
 
-  public FootballService(PlayerRepository playerRepository, TeamRepository teamRepository,MatchRepository matchRepository, AlbumRepository albumRepository) {
+  public FootballService(PlayerRepository playerRepository, TeamRepository teamRepository,MatchRepository matchRepository, AlbumRepository albumRepository, MatchEventRepository matchEventRepository) {
     this.playerRepository = playerRepository;
     this.teamRepository = teamRepository;
     this.matchRepository = matchRepository;
     this.albumRepository = albumRepository;
+    this.matchEventRepository = matchEventRepository;
   }
 
   public List<Player> searchPlayers(String name) {
@@ -62,8 +68,8 @@ public class FootballService {
         .toList();
   }
 
-
-//  @Transactional(readOnly = true)
+  // Transactional so that context remanins so players for the team can be loaded lazy
+  @Transactional(readOnly = true)
   public Team getTeam(Long id) {
     TeamEntity teamEntity = teamRepository.findById(id).orElse(null);
     if (teamEntity == null) {
@@ -157,6 +163,49 @@ public class FootballService {
 
   public List<TeamPlayers> getNumberOfPlayersByPosition(String position) {
     return teamRepository.getNumberOfPlayersByPosition(position);
+  }
+
+  // ==== Following correspond to MatchEvent data which are retrieved
+  // by native queries in the MatchEvent Repository
+
+  public Match getMatchWithTimeline(Long matchId) {
+    MatchEntity match = matchRepository.findByIdWithTimeline(matchId).orElse(null);
+    if (match != null) {
+      return new Match(match.getId(), match.getTeam1().getName(), match.getTeam2().getName(),
+          match.getTeam1Goals(), match.getTeam2Goals(), match.getMatchDate(),
+          match.getEvents()
+              .stream()
+              .map(e -> new MatchEvent(e.getTime(), e.getDetails()))
+              .toList());
+    } else {
+      return null;
+    }
+  }
+
+  public List<MatchEvent> getMatchWithPlayerEvents(Long matchId, Long playerId) {
+    List<MatchEventEntity> matchEvents = matchEventRepository.findByMatchIdAndPlayer(matchId, playerId);
+
+    return matchEvents.stream()
+        .map(e -> new MatchEvent(e.getTime(), e.getDetails()))
+        .toList();
+  }
+
+  public List<MatchEvent> getMatchEventsOfType(Long matchId, Integer eventType) {
+    return matchEventRepository.findByIdIncludeEventsOfType(matchId, eventType).stream()
+        .map(e -> new MatchEvent(e.getTime(), e.getDetails()))
+        .toList();
+  }
+
+  public Integer getTotalPlayersWithMoreThanNMatches(int num_matches) {
+    return playerRepository.getTotalPlayersWithMoreThanNMatches(num_matches);
+  }
+
+  public List<MatchEvent> getMatchWithPlayerEventsError(Long matchId, Long playerId) {
+    List<MatchEventEntity> matchEvents = matchEventRepository.findByMatchIdAndPlayerError(matchId, playerId);
+
+    return matchEvents.stream()
+        .map(e -> new MatchEvent(e.getTime(), e.getDetails()))
+        .toList();
   }
 
 }

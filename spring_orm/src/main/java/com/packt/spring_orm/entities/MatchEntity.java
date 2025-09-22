@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name="matches")
@@ -34,4 +35,7 @@ public class MatchEntity {
 
   @Column(name = "team2_goals", columnDefinition = "integer default 0")
   private Integer team2Goals;
+
+  @OneToMany(mappedBy = "match", fetch = FetchType.LAZY)
+  private List<MatchEventEntity> events;
 }

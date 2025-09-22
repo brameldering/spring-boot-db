@@ -4,6 +4,7 @@ import com.packt.spring_orm.entities.PlayerEntity;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.query.Procedure;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -23,4 +24,6 @@ public interface PlayerRepository extends JpaRepository<PlayerEntity, Long> {
 
   List<PlayerEntity> findByTeamId(Long teamId, Sort sort);
 
+  @Procedure("FIND_PLAYERS_WITH_MORE_THAN_N_MATCHES")
+  int getTotalPlayersWithMoreThanNMatches(int num_matches);
 }

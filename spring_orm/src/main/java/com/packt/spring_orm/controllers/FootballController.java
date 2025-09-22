@@ -1,5 +1,7 @@
 package com.packt.spring_orm.controllers;
 
+import com.packt.spring_orm.records.Match;
+import com.packt.spring_orm.records.MatchEvent;
 import com.packt.spring_orm.records.Player;
 import com.packt.spring_orm.records.Team;
 import com.packt.spring_orm.repositories.TeamPlayers;
@@ -101,5 +103,31 @@ public class FootballController {
   public List<TeamPlayers> getNumberOfPlayersByPosition(@PathVariable String position) {
     return footballService.getNumberOfPlayersByPosition(position);
   }
+
+  // MatchEvents
+  @GetMapping("/matches/{id}/timeline")
+  public Match getMatchWithTimeline(@PathVariable Long id) {
+    return footballService.getMatchWithTimeline(id);
+  }
+
+  @GetMapping("/matches/{id}/timeline/{playerId}")
+  public List<MatchEvent> getMatchWithTimeline(@PathVariable Long id, @PathVariable Long playerId) {
+    return footballService.getMatchWithPlayerEvents(id, playerId);
+  }
+  @GetMapping("/matches/{id}/timeline/events/{type}")
+  public List<MatchEvent> getMatchWithEventsOfType(@PathVariable Long id, @PathVariable Integer type) {
+    return footballService.getMatchEventsOfType(id, type);
+  }
+
+  @GetMapping("/players/matches/{numMatches}")
+  public Integer getTotalPlayersWithMoreThanNMatches(@PathVariable Integer numMatches) {
+    return footballService.getTotalPlayersWithMoreThanNMatches(numMatches);
+  }
+
+  @GetMapping("/matches/{id}/timeline/{playerId}/error")
+  public List<MatchEvent> getMatchWithTimelineError(@PathVariable Long id, @PathVariable Long playerId) {
+    return footballService.getMatchWithPlayerEventsError(id, playerId);
+  }
+
 
 }

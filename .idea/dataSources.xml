@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="football@localhost" uuid="bf26726d-98c7-4811-bfa2-444cf15177cc">
+    <data-source source="LOCAL" name="football3@localhost" uuid="e7aeab67-cf1d-486b-8e92-9402dc16943e">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:5432/football</jdbc-url>
+      <jdbc-url>jdbc:postgresql://localhost:5432/football3</jdbc-url>
       <jdbc-additional-properties>
         <property name="com.intellij.clouds.kubernetes.db.host.port" />
         <property name="com.intellij.clouds.kubernetes.db.enabled" value="false" />

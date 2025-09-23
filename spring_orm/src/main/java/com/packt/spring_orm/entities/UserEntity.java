@@ -6,28 +6,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "albums")
+@Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AlbumEntity {
-
+public class UserEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private String title;
-  private LocalDate expireDate;
+  private String username;
 
-  @OneToMany
-  private List<CardEntity> cards;
+  @OneToMany(mappedBy = "owner")
+  private List<CardEntity> ownedCards;
 
-  @ManyToOne
-  @JoinColumn(name = "owner_id")
-  private UserEntity owner;
+  @OneToMany(mappedBy = "owner")
+  private Set<AlbumEntity> ownedAlbums;
 }

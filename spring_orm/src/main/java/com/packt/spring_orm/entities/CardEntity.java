@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "cards")
+@Table(name = "cards", uniqueConstraints = {@UniqueConstraint(columnNames = {"album_id", "player_id"}) })
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,12 +17,16 @@ public class CardEntity {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "album_id")
   private AlbumEntity album;
 
   @ManyToOne
   @JoinColumn(name = "player_id")
   private PlayerEntity player;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "owner_id")
+  private UserEntity owner;
 
 }

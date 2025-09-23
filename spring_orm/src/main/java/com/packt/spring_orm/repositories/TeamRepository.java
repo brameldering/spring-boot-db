@@ -12,7 +12,7 @@ public interface TeamRepository extends CrudRepository<TeamEntity, Long> {
   List<TeamEntity> findAllWithPlayers();
 
   @Query("SELECT t FROM TeamEntity t JOIN FETCH t.players WHERE t.id = ?1")
-  public Optional<TeamEntity> findByIdWithPlayers(Integer id);
+  public Optional<TeamEntity> findByIdWithPlayers(Long id);
 
   @Query("SELECT p.team.name as name, count(p.id) as playersCount FROM PlayerEntity p WHERE p.position = ?1 GROUP BY p.team ORDER BY playersCount DESC")
   public List<TeamPlayers> getNumberOfPlayersByPosition(String position);

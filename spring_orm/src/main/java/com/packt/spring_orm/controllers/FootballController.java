@@ -129,5 +129,4 @@ public class FootballController {
     return footballService.getMatchWithPlayerEventsError(id, playerId);
   }
 
-
 }

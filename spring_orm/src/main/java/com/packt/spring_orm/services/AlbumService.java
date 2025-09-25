@@ -11,6 +11,7 @@ import com.packt.spring_orm.repositories.PlayerRepository;
 import com.packt.spring_orm.repositories.UserRepository;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -109,6 +110,7 @@ public class AlbumService {
         .toList();
   }
 
+  @Transactional(isolation = Isolation.SERIALIZABLE)
   public List<Card> tradeAllCards(Long userId1, Long userId2) {
     Integer potentialUser1ToUser2 = cardRepository.countMatchBetweenUsers(userId1, userId2);
     Integer potentialUser2ToUser1 = cardRepository.countMatchBetweenUsers(userId2, userId1);

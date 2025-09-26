@@ -17,12 +17,14 @@
           <entry name="$MAVEN_REPOSITORY$/org/projectlombok/lombok/1.18.42/lombok-1.18.42.jar" />
         </processorPath>
         <module name="spring_orm" />
+        <module name="spring_mdb" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="spring_jdbc" options="-parameters" />
+      <module name="spring_mdb" options="-parameters" />
       <module name="spring_orm" options="-parameters" />
     </option>
   </component>

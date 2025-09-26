@@ -12,6 +12,7 @@
 
     <modules>
         <module>spring_jdbc</module>
+        <module>spring_mdb</module>
         <module>spring_orm</module>
     </modules>
 

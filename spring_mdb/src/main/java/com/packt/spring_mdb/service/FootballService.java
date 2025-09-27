@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import com.packt.spring_mdb.exceptions.ResourceNotFoundException;
 import com.packt.spring_mdb.repository.Player;
 import com.packt.spring_mdb.repository.Team;
 import com.packt.spring_mdb.repository.TeamRepository;
@@ -27,12 +26,14 @@ public class FootballService {
 
   public Team getTeam(String id) {
     return teamRepository.findById(id)
-        .orElseThrow(() -> new ResourceNotFoundException("Team not found with ID: " + id));
+        .orElse(null);
+//        .orElseThrow(() -> new ResourceNotFoundException("Team not found with ID: " + id));
   }
 
   public Team getTeamByName(String name) {
     return teamRepository.findByName(name)
-        .orElseThrow(() -> new ResourceNotFoundException("Team not found with name: " + name));
+        .orElse(null);
+//        .orElseThrow(() -> new ResourceNotFoundException("Team not found with name: " + name));
   }
 
   public List<Team> getTeamsContainingName(String name) {

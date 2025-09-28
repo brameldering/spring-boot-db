@@ -1,7 +1,7 @@
 spring:
   data:
     mongodb:
-#      uri: mongodb://127.0.0.1:27017/?directConnection=true
+#      uri: mongodb://packt:packt@127.0.0.1:27017/football?directConnection=true
       host: 127.0.0.1
       port: 27017
       database: football

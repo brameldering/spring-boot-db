@@ -2,6 +2,8 @@ package com.packt.spring_mdb;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
@@ -27,13 +29,17 @@ import com.packt.spring_mdb.repository.Team;
 @Testcontainers
 public class FootballServiceTest {
 
+  static Logger logger = LoggerFactory.getLogger(FootballServiceTest.class);
+
   static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo")
       .withCopyFileToContainer(MountableFile.forClasspathResource("mongo/teams.json"), "teams.json");
 
   @BeforeAll
   static void startContainer() throws IOException, InterruptedException {
+    logger.info("Before MongoDBContainer start and file imported");
     mongoDBContainer.start();
     importFile("teams");
+    logger.info("After MongoDBContainer start and file imported");
   }
 
   static void importFile(String fileName) throws IOException, InterruptedException {
@@ -45,7 +51,9 @@ public class FootballServiceTest {
 
   @DynamicPropertySource
   static void setMongoDbProperties(DynamicPropertyRegistry registry) {
+    logger.info("Before registry.add");
     registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
+    logger.info("After registry.add");
   }
 
   @Autowired
@@ -53,8 +61,12 @@ public class FootballServiceTest {
 
   @Test
   void getTeam() {
+    logger.info("Before getTeam test");
     Team team = footballService.getTeam("1884881");
+    logger.info("After getTeam test");
     assertNotNull(team);
+    logger.info("After assertNotNull getTeam test");
+
   }
 
   @Test

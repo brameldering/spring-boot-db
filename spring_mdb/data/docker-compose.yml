@@ -1,0 +1,22 @@
+services:
+  mongo1:
+    container_name: mongo1
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    command: mongod --replSet rs0 --port 27017 --bind_ip_all
+  mongo2:
+    container_name: mongo2
+    image: mongo
+    restart: always
+    ports:
+      - 27018:27017
+    command: mongod --replSet rs0 --port 27017 --bind_ip_all
+  mongo3:
+    container_name: mongo3
+    image: mongo
+    restart: always
+    ports:
+      - 27019:27017
+    command: mongod --replSet rs0 --port 27017 --bind_ip_all

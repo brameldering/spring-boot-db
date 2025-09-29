@@ -1,5 +1,6 @@
 package com.packt.spring_mdb.controller;
 
+import com.packt.spring_mdb.repository.MatchEvent;
 import com.packt.spring_mdb.repository.Player;
 import com.packt.spring_mdb.repository.Team;
 import com.packt.spring_mdb.service.FootballService;
@@ -51,9 +52,21 @@ public class FootballController {
     footballService.updateTeamName(id, name);
   }
 
+  // Players
   @GetMapping("/player/{id}")
   public Player getPlayer(@PathVariable String id) {
     return footballService.getPlayer(id);
+  }
+
+  // Events
+  @GetMapping("/match/{id}/events")
+  public List<MatchEvent> getMatchEvents(@PathVariable String id) {
+    return footballService.getMatchEvents(id);
+  }
+
+  @GetMapping("/match/{matchId}/{playerId}/events")
+  public List<MatchEvent> getPlayerEvents(@PathVariable String matchId, @PathVariable String playerId) {
+    return footballService.getPlayerEvents(matchId, playerId);
   }
 
 }

@@ -1,103 +1,121 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.5.6</version>
-		<relativePath/> <!-- lookup parent from repositories -->
-	</parent>
-	<groupId>com.packt</groupId>
-	<artifactId>spring_orm</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>spring_orm</name>
-	<description>Demo project for Spring Boot</description>
-	<url/>
-	<licenses>
-		<license/>
-	</licenses>
-	<developers>
-		<developer/>
-	</developers>
-	<scm>
-		<connection/>
-		<developerConnection/>
-		<tag/>
-		<url/>
-	</scm>
-	<properties>
-		<java.version>21</java.version>
-	</properties>
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.packt</groupId>
+        <artifactId>my-project-db</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>com.packt</groupId>
+    <artifactId>spring_orm</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>spring_orm</name>
+    <description>Demo project for Spring Boot</description>
+
+    <properties>
+        <java.version>21</java.version>
+        <testcontainers.version>1.19.1</testcontainers.version>
+        <flyway.version>11.13.1</flyway.version>
+        <springdoc.version>2.8.13</springdoc.version>
+        <postgresql.version>42.7.7</postgresql.version>
+    </properties>
+
+    <dependencies>
+        <!-- Spring Web and JPA (versions managed by Spring Boot parent) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <!-- Lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.42</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- springdoc OpenAPI -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>2.8.13</version>
+            <version>${springdoc.version}</version>
         </dependency>
+
+        <!-- Runtime PostgreSQL driver -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
+            <scope>runtime</scope>
         </dependency>
-		<dependency>
-			<groupId>org.postgresql</groupId>
-			<artifactId>postgresql</artifactId>
-            <version>42.7.7</version>
-			<scope>runtime</scope>
-		</dependency>
+
+        <!-- Flyway core (runtime migrations) -->
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>11.13.1</version>
+            <version>${flyway.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-database-postgresql</artifactId>
-            <version>11.13.1</version>
+            <version>${flyway.version}</version>
         </dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
+
+        <!-- Spring Boot test support -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Testcontainers -->
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>junit-jupiter</artifactId>
+            <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
+
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>postgresql</artifactId>
+            <version>${testcontainers.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
+    <build>
+        <plugins>
+            <!-- Spring Boot plugin (version managed by parent) -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+
+            <!-- Flyway Maven plugin: version kept explicit -->
             <plugin>
                 <groupId>org.flywaydb</groupId>
                 <artifactId>flyway-maven-plugin</artifactId>
-                <version>11.13.1</version>
+                <version>${flyway.version}</version>
                 <configuration>
                     <url>jdbc:postgresql://localhost:5432/football3</url>
                     <user>packt</user>
                     <password>packt</password>
                 </configuration>
             </plugin>
+
+            <!-- Compiler plugin: version managed by Spring Boot parent; keep annotation processor configured -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -106,11 +124,11 @@
                         <path>
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
-                            <version>1.18.42</version> </path>
+                            <version>1.18.42</version>
+                        </path>
                     </annotationProcessorPaths>
                 </configuration>
             </plugin>
-		</plugins>
-	</build>
-
+        </plugins>
+    </build>
 </project>

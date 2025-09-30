@@ -21,4 +21,20 @@ public class PlayerService {
     return playerRepository.findById(id).orElse(null);
   }
 
+  /**
+   * Saves a new Player entity to the database.
+   * If the player object has a non-null ID, it updates the existing player.
+   * If the player object has a null ID, it creates a new player.
+   * @param player The Player object to save.
+   * @return The saved Player object, potentially with a generated ID.
+   */
+  public Player savePlayer(Player player) {
+    log.info("savePlayer: " + player.toString()); // Assuming Player has a toString()
+    return playerRepository.save(player);
+  }
+
+  public void deletePlayer(String id) {
+    log.info("deletePlayer with id: " +id);
+    playerRepository.deleteById(id);
+  }
 }

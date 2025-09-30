@@ -15,9 +15,9 @@ import java.util.List;
 public class FootballService {
   private final TeamRepository teamRepository;
   private final MongoTemplate mongoTemplate;
-  private PlayerRepository playerRepository;
-  private MatchEventRepository matchEventRepository;
-  private MatchRepository matchRepository;
+  private final PlayerRepository playerRepository;
+  private final MatchEventRepository matchEventRepository;
+  private final MatchRepository matchRepository;
 
   public FootballService(TeamRepository teamRepository, MongoTemplate mongoTemplate, PlayerRepository playerRepository, MatchEventRepository matchEventRepository, MatchRepository matchRepository) {
     this.teamRepository = teamRepository;
@@ -32,6 +32,7 @@ public class FootballService {
   // Teams
 
   public Team getTeam(String id) {
+    log.info("getTeam with id: " +id);
     return teamRepository.findById(id)
         .orElse(null);
 //        .orElseThrow(() -> new ResourceNotFoundException("Team not found with ID: " + id));

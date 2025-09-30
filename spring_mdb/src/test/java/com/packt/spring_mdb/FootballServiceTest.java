@@ -1,16 +1,12 @@
 package com.packt.spring_mdb;
 
-import com.packt.spring_mdb.repository.PlayerRepository;
+import com.packt.spring_mdb.repository.MatchEvent;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.mapping.MongoPersistentEntity;
-import org.springframework.data.mongodb.core.mapping.MongoPersistentProperty;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.Container;
@@ -24,7 +20,6 @@ import static org.hamcrest.collection.IsEmptyCollection.empty;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.util.List;
 
 import com.packt.spring_mdb.service.FootballService;
@@ -38,90 +33,36 @@ public class FootballServiceTest {
   static Logger logger = LoggerFactory.getLogger(FootballServiceTest.class);
 
   static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo")
-      .withCopyFileToContainer(MountableFile.forClasspathResource("mongo/teams.json"), "teams.json");
+      .withSharding()
+      .withCopyFileToContainer(MountableFile.forClasspathResource("mongo/teams.json"), "teams.json")
+      .withCopyFileToContainer(MountableFile.forClasspathResource("mongo/players.json"), "players.json")
+      .withCopyFileToContainer(MountableFile.forClasspathResource("mongo/matches.json"), "matches.json")
+      .withCopyFileToContainer(MountableFile.forClasspathResource("mongo/match_events.json"), "match_events.json");
 
   @BeforeAll
   static void startContainer() throws IOException, InterruptedException {
-    logger.info("Before MongoDBContainer start and file imported");
     mongoDBContainer.start();
-    importFile("teams");
-    logger.info("After MongoDBContainer start and file imported");
+    importFile(mongoDBContainer, "matches");
+    importFile(mongoDBContainer, "match_events");
+    importFile(mongoDBContainer, "teams");
+    importFile(mongoDBContainer, "players");
   }
 
-  static void importFile(String fileName) throws IOException, InterruptedException {
-    Container.ExecResult res = mongoDBContainer.execInContainer("mongoimport", "--db=football", "--collection=" + fileName, "--jsonArray", fileName + ".json");
-    if (res.getExitCode() > 0){
+  static void importFile(MongoDBContainer container, String fileName) throws IOException, InterruptedException {
+    String uri = "mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000";
+    Container.ExecResult res = container.execInContainer("mongoimport", "--uri=" + uri, "--db=football", "--collection=" + fileName, "--jsonArray", fileName + ".json");
+    if (res.getExitCode() > 0) {
       throw new RuntimeException("MongoDB not properly initialized");
     }
   }
 
   @DynamicPropertySource
   static void setMongoDbProperties(DynamicPropertyRegistry registry) {
-    logger.info("Before registry.add");
-    registry.add("spring.data.mongodb.uri", mongoDBContainer::getReplicaSetUrl);
-    logger.info("After registry.add");
+    registry.add("spring.data.mongodb.uri", () -> mongoDBContainer.getReplicaSetUrl("football"));
   }
 
   @Autowired
   private FootballService footballService;
-
-  @Autowired
-  org.springframework.data.mongodb.core.mapping.MongoMappingContext mappingContext;
-
-  @Test
-  void debugMapping() {
-    MongoPersistentEntity<?> entity = mappingContext.getPersistentEntity(com.packt.spring_mdb.repository.Player.class);
-    MongoPersistentProperty idProp = entity.getIdProperty();
-    System.out.println("idProp: " + idProp);
-    if (idProp != null) {
-      System.out.println("  id property name: " + idProp.getName());
-      System.out.println("  id mapped field:  " + idProp.getFieldName());
-      System.out.println("  id type:          " + idProp.getActualType());
-    }
-
-    // Use the MongoPersistentProperty type explicitly to avoid overload ambiguity
-    entity.doWithProperties((MongoPersistentProperty p) -> {
-      System.out.println("property: " + p.getName() + " -> field: " + p.getFieldName() + " -> type: " + p.getActualType());
-    });
-  }
-
-  // For debugging
-  @Autowired
-  PlayerRepository playerRepository;
-  @Autowired
-  org.springframework.data.mongodb.core.MongoTemplate mongoTemplate;
-  @BeforeEach
-  void seedPlayer() {
-    playerRepository.save(new Player(
-        "420334",
-        3,
-        "Eliana STABILE",
-        "Defender",
-        LocalDate.parse("1993-11-26"),
-        167,
-        61
-    ));
-  }
-
-  @Test
-  void debugFindPlayer() {
-    // repository call
-    var repoResult = playerRepository.findById("420334");
-    System.out.println("playerRepository.findById -> " + repoResult);
-
-    // direct template call (explicit _id)
-    var templateById = mongoTemplate.findById("420334", Player.class, "players");
-    System.out.println("mongoTemplate.findById -> " + templateById);
-
-    // explicit query by _id as a Document
-    var doc = mongoTemplate.getCollection("players")
-        .find(new org.bson.Document("_id", "420334"))
-        .first();
-    System.out.println("raw collection find -> " + doc);
-
-    // fail fast so CI shows output
-    org.junit.jupiter.api.Assertions.assertNotNull(templateById, "mongoTemplate did not find the document");
-  }
 
   @Test
   void getTeam() {
@@ -198,6 +139,20 @@ public class FootballServiceTest {
     // ASSERT
     Team updatedTeam = footballService.getTeam(savedTeam.getId());
     assertThat(updatedTeam.getName(), is("Venezuela"));
+  }
+
+  // Match Event tests
+
+  @Test
+  void getMatchEvents() {
+    List<MatchEvent> events = footballService.getMatchEvents("400222852");
+    assertThat(events, not(empty()));
+  }
+
+  @Test
+  void getPlayerEvents() {
+    List<MatchEvent> playerEvents = footballService.getPlayerEvents("400222844", "413022");
+    assertThat(playerEvents, not(empty()));
   }
 
 }

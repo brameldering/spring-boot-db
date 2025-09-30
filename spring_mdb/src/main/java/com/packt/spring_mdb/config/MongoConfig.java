@@ -8,9 +8,6 @@ import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
-import org.springframework.data.mongodb.core.convert.MongoCustomConversions;
-
-import java.util.List;
 
 @Configuration
 public class MongoConfig extends AbstractMongoClientConfiguration {
@@ -36,13 +33,5 @@ public class MongoConfig extends AbstractMongoClientConfiguration {
             .build();
         return MongoClients.create(mongoClientSettings);
     }
-
-  @Override
-  public MongoCustomConversions customConversions() {
-    return new MongoCustomConversions(List.of(
-        new StringToLocalDateConverter(),
-        new LocalDateToStringConverter()
-    ));
-  }
 }
 

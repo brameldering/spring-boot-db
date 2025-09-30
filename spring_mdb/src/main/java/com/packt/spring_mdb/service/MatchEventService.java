@@ -2,9 +2,6 @@ package com.packt.spring_mdb.service;
 
 import com.packt.spring_mdb.entities.MatchEvent;
 import com.packt.spring_mdb.repository.MatchEventRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,11 +10,9 @@ import java.util.List;
 public class MatchEventService {
   private final MatchEventRepository matchEventRepository;
 
-  public MatchEventService(MongoTemplate mongoTemplate, MatchEventRepository matchEventRepository) {
+  public MatchEventService(MatchEventRepository matchEventRepository) {
     this.matchEventRepository = matchEventRepository;
   }
-
-  private static Logger log = LoggerFactory.getLogger(MatchEventService.class);
 
   public List<MatchEvent> getMatchEvents(String matchId) {
     return matchEventRepository.findByMatchId(matchId);

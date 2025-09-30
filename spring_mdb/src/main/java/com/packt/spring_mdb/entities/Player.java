@@ -1,4 +1,4 @@
-package com.packt.spring_mdb.repository;
+package com.packt.spring_mdb.entities;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

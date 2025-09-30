@@ -1,6 +1,7 @@
 package com.packt.spring_mdb.service;
 
-import com.packt.spring_mdb.repository.*;
+import com.packt.spring_mdb.entities.Team;
+import com.packt.spring_mdb.repository.TeamRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -12,24 +13,16 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class FootballService {
+public class TeamService {
   private final TeamRepository teamRepository;
   private final MongoTemplate mongoTemplate;
-  private final PlayerRepository playerRepository;
-  private final MatchEventRepository matchEventRepository;
-  private final MatchRepository matchRepository;
 
-  public FootballService(TeamRepository teamRepository, MongoTemplate mongoTemplate, PlayerRepository playerRepository, MatchEventRepository matchEventRepository, MatchRepository matchRepository) {
+  public TeamService(TeamRepository teamRepository, MongoTemplate mongoTemplate) {
     this.teamRepository = teamRepository;
     this.mongoTemplate = mongoTemplate;
-    this.playerRepository = playerRepository;
-    this.matchEventRepository = matchEventRepository;
-    this.matchRepository = matchRepository;
   }
 
-  private static Logger log = LoggerFactory.getLogger(FootballService.class);
-
-  // Teams
+  private static Logger log = LoggerFactory.getLogger(TeamService.class);
 
   public Team getTeam(String id) {
     log.info("getTeam with id: " +id);
@@ -65,22 +58,4 @@ public class FootballService {
     Update updateName = new Update().set("name", name);
     mongoTemplate.updateFirst(query, updateName, Team.class);
   }
-
-  // Players in teams
-
-  public Player getPlayer(String id) {
-    log.info("getPlayer with id: " +id);
-    return playerRepository.findById(id).orElse(null);
-  }
-
-  // Events
-
-  public List<MatchEvent> getMatchEvents(String matchId) {
-    return matchEventRepository.findByMatchId(matchId);
-  }
-
-  public List<MatchEvent> getPlayerEvents(String matchId, String playerId) {
-    return matchEventRepository.findByMatchIdAndPlayerId(matchId, playerId);
-  }
-
 }

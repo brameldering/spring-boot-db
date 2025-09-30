@@ -2,6 +2,7 @@ package com.packt.spring_mdb.repository;
 
 import java.util.List;
 
+import com.packt.spring_mdb.entities.MatchEvent;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 

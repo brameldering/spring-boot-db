@@ -1,5 +1,6 @@
 package com.packt.spring_mdb.repository;
 
+import com.packt.spring_mdb.entities.Team;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 

@@ -3,8 +3,8 @@ spring:
     mongodb:
 #      uri: mongodb://127.0.0.1:27017/football
       # In application.properties
-       uri: mongodb://mongo1:27017,mongo2:27017,mongo3:27017/football?replicaSet=rs0
-       # mongodb://localhost:27017,localhost:27018,localhost:27019/football?replicaSet=rs0
+#       uri: mongodb://mongo1:27017,mongo2:27017,mongo3:27017/football?replicaSet=rs0
+       uri: mongodb://localhost:27017,localhost:27018,localhost:27019/football?replicaSet=rs0
 #      host: 127.0.0.1
 #      port: 27017
 #      database: football

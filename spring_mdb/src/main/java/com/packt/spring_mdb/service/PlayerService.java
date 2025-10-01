@@ -4,7 +4,10 @@ import com.packt.spring_mdb.entities.Player;
 import com.packt.spring_mdb.repository.PlayerRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class PlayerService {
@@ -14,7 +17,7 @@ public class PlayerService {
     this.playerRepository = playerRepository;
   }
 
-  private static Logger log = LoggerFactory.getLogger(PlayerService.class);
+  private final static Logger log = LoggerFactory.getLogger(PlayerService.class);
 
   public Player getPlayer(String id) {
     log.info("getPlayer with id: " +id);

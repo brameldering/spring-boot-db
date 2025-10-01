@@ -60,11 +60,11 @@ else
   echo "$(date) Initiating replica set on mongo1 (internal hostnames)..."
   docker exec mongo1 mongosh --quiet --eval "rs.initiate({
     _id: '${RS_NAME}',
-    members: [
-      { _id: 0, host: 'mongo1:27017' },
-      { _id: 1, host: 'mongo2:27017' },
-      { _id: 2, host: 'mongo3:27017' }
-    ]
+      members: [
+        { _id: 0, host: 'mongo1:27017' },
+        { _id: 1, host: 'mongo2:27017' },
+        { _id: 2, host: 'mongo3:27017' }
+      ]
   })"
   sleep 5
 fi

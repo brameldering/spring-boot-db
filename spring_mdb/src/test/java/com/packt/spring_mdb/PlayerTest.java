@@ -6,15 +6,22 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class PlayerTest extends InitFootballServiceTest {
+public class PlayerTest extends InitTestFor1TestContainer {
 
   @Autowired
   protected PlayerService playerService;
+
+  @Test
+  void getAllPlayers() {
+    List<Player> players = playerService.getAllPlayers();
+    assertThat(players, hasSize(greaterThan(0)));
+  }
 
   @Test
   void getPlayer() {

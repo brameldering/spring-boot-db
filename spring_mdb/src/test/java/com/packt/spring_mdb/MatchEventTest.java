@@ -11,7 +11,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.collection.IsEmptyCollection.empty;
 
-public class MatchEventTest extends InitFootballServiceTest {
+public class MatchEventTest extends InitTestFor1TestContainer {
 
   @Autowired
   protected MatchEventService matchEventService;

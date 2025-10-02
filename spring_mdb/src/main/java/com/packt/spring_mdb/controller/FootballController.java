@@ -59,6 +59,11 @@ public class FootballController {
   }
 
   // Players
+  @GetMapping("/player")
+  public List<Player> getPlayers() {
+    return playerService.getAllPlayers();
+  }
+
   @GetMapping("/player/{id}")
   public Player getPlayer(@PathVariable String id) {
     return playerService.getPlayer(id);

@@ -15,9 +15,9 @@ import java.io.IOException;
 
 @SpringBootTest
 @Testcontainers
-public abstract class InitFootballServiceTest {
+public abstract class InitTestFor1TestContainer {
 
-  static Logger logger = LoggerFactory.getLogger(InitFootballServiceTest.class);
+  static Logger logger = LoggerFactory.getLogger(InitTestFor1TestContainer.class);
 
   // Initialize and configure the MongoDB container with data files
   static MongoDBContainer mongoDBContainer = new MongoDBContainer("mongo")

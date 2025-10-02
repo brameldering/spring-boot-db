@@ -17,7 +17,7 @@ import com.packt.spring_mdb.entities.Team;
 
 @SpringBootTest
 @Testcontainers
-public class TeamTest extends InitFootballServiceTest {
+public class TeamTest extends InitTestFor1TestContainer {
 
   @Autowired
   protected TeamService teamService;

@@ -19,6 +19,11 @@ public class PlayerService {
 
   private final static Logger log = LoggerFactory.getLogger(PlayerService.class);
 
+  public List<Player> getAllPlayers() {
+    log.info("getAllPlayers");
+    return playerRepository.findAll();
+  }
+
   public Player getPlayer(String id) {
     log.info("getPlayer with id: " +id);
     return playerRepository.findById(id).orElse(null);

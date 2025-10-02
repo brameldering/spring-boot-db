@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
@@ -17,4 +18,7 @@ public class User {
   private String username;
 
   private Integer tokens;
+
+  @Version
+  private Long version;
 }

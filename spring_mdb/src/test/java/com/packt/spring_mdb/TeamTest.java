@@ -3,8 +3,6 @@ package com.packt.spring_mdb;
 import com.packt.spring_mdb.service.TeamService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
@@ -15,8 +13,6 @@ import java.util.List;
 
 import com.packt.spring_mdb.entities.Team;
 
-@SpringBootTest
-@Testcontainers
 public class TeamTest extends InitTestFor1TestContainer {
 
   @Autowired

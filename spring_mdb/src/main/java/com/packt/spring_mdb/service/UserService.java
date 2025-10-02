@@ -84,4 +84,12 @@ public class UserService {
     return userRepository.save(user);
   }
 
+  public Optional<User> getUser(String id){
+    return userRepository.findById(id);
+  }
+
+  public List<Card> getUserCards(String id){
+    return cardRepository.findByOwnerId(id);
+  }
+
 }

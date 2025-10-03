@@ -43,8 +43,9 @@ public class UserService {
   public Integer buyTokens(String userId, Integer tokens) {
     log.info("buyTokens called");
     Query query = new Query(Criteria.where("id").is(userId));
-    Update update = new Update().inc("tokens", tokens);
     log.info("query: {}", query);
+    Update update = new Update().inc("tokens", tokens);
+    log.info("update: {}", update);
     UpdateResult result = mongoTemplate.updateFirst(query, update, User.class, "users");
     log.info("result: {}", result);
     return (int) result.getModifiedCount();
@@ -56,18 +57,21 @@ public class UserService {
     if (userOpt.isPresent()) {
       User user = userOpt.get();
       List<Player> availablePlayers = getAvailablePlayers();
-      Random random = new Random();
+
       if (user.getTokens() >= count) {
         user.setTokens(user.getTokens() - count);
       } else {
         throw new RuntimeException("Not enough tokens");
       }
+
+      Random random = new Random();
       List<Card> cards = Stream.generate(() -> {
         Card card = new Card();
         card.setOwner(user);
         card.setPlayer(availablePlayers.get(random.nextInt(0, availablePlayers.size())));
         return card;
       }).limit(count).toList();
+
       List<Card> savedCards = cardRepository.saveAll(cards);
       userRepository.save(user);
       return savedCards.size();
@@ -90,6 +94,10 @@ public class UserService {
 
   public List<Card> getUserCards(String id){
     return cardRepository.findByOwnerId(id);
+  }
+
+  public List<User> getAllUsers() {
+    return userRepository.findAll();
   }
 
 }

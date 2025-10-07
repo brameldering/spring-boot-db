@@ -38,6 +38,7 @@
         </dependency>
     </dependencies>
 
+    <!-- Generic plugin -->
     <build>
         <plugins>
             <plugin>

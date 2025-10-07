@@ -19,6 +19,7 @@
     <description>A root POM for a multi-module project with Spring Boot database examples.</description>
 
     <modules>
+        <module>spring_cassandra</module>
         <module>spring_jdbc</module>
         <module>spring_mdb</module>
         <module>spring_orm</module>
@@ -26,8 +27,23 @@
 
     <properties>
         <java.version>21</java.version>
-        <!-- If you want to pin JUnit or Testcontainers versions explicitly you can add properties here. -->
     </properties>
 
-    <!-- No explicit junit:junit entries here. Spring Boot parent manages common test deps (including JUnit 5) -->
+    <!-- Spring Boot test support -->
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 </project>

@@ -12,9 +12,14 @@ import org.testcontainers.cassandra.CassandraContainer;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Set;
+import java.util.Random;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.*;
 
 @Testcontainers
 @SpringBootTest
@@ -38,6 +43,8 @@ public class CommentServiceTest {
   @Autowired
   private CommentService commentService;
 
+  static Random random = new Random();
+
   @Test
   void postCommentTest() {
     CommentPost commentPost = new CommentPost("user1", "player", "1", "The best!", Set.of("label1", "label2"));
@@ -46,4 +53,114 @@ public class CommentServiceTest {
     assertNotNull(result.getCommentId());
   }
 
+  @Test
+  void getPlayerCommentsTest() {
+    // ARRANGE
+    String playerId = "player" +random.nextInt();
+    CommentPost comment = new CommentPost("user1", "player", playerId, "The best!", Set.of("label1", "label2"));
+    Comment result = commentService.postComment(comment);
+    // ACT
+    var comments = commentService.getComments("player", playerId);
+    // ASSERT
+    assertNotNull(comments);
+    assertThat(comments, hasSize(1));
+    assertTrue(comments.stream().anyMatch(c -> c.getCommentId().equals(result.getCommentId())));
+  }
+
+  @Test
+  void getAllComments() {
+    // ARRANGE
+    CommentPost comment = new CommentPost("user1", "player", "1", "The best!", Set.of("label1", "label2"));
+    Comment result = commentService.postComment(comment);
+    // ACT
+    var comments = commentService.getComments();
+    // ASSERT
+    assertNotNull(comments);
+    assertTrue(comments.stream().anyMatch(c -> c.getCommentId().equals(result.getCommentId())));
+  }
+
+  @Test
+  void getCommentsTest_open_search() {
+    // ARRANGE
+    LocalDateTime now = LocalDateTime.now();
+    String playerId = "player" + random.nextInt(100000);
+    CommentPost comment = new CommentPost("user1", "player", playerId, "The best!", Set.of("label1", "label2"));
+    Comment resultUser1 = commentService.postComment(comment);
+    comment = new CommentPost("user2", "player", playerId, "The best!", Set.of("label3", "label4"));
+    Comment resultUser2 = commentService.postComment(comment);
+
+    // ACT
+    var comments = commentService.getComments("player", playerId, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
+    // ASSERT
+    assertThat(comments, hasSize(2));
+    assertTrue(comments.stream().anyMatch(c -> c.getCommentId().equals(resultUser1.getCommentId())));
+    assertTrue(comments.stream().anyMatch(c -> c.getCommentId().equals(resultUser2.getCommentId())));
+
+    // ACT
+    comments = commentService.getComments("player", playerId, Optional.of("user1"), Optional.empty(), Optional.empty(), Optional.empty());
+    // ASSERT
+    assertThat(comments, hasSize(1));
+    assertTrue(comments.stream().anyMatch(c -> c.getCommentId().equals(resultUser1.getCommentId())));
+
+    // ACT
+    comments = commentService.getComments("player", playerId, Optional.of("user2"), Optional.empty(), Optional.empty(), Optional.empty());
+    // ASSERT
+    assertThat(comments, hasSize(1));
+    assertTrue(comments.stream().anyMatch(c -> c.getCommentId().equals(resultUser2.getCommentId())));
+
+    // ACT
+    comments = commentService.getComments("player", playerId, Optional.empty(), Optional.empty(), Optional.empty(), Optional.of(Set.of("label1")));
+    // ASSERT
+    assertThat(comments, hasSize(1));
+    assertTrue(comments.stream().anyMatch(c -> c.getCommentId().equals(resultUser1.getCommentId())));
+
+    // ACT
+    comments = commentService.getComments("player", playerId, Optional.empty(), Optional.empty(), Optional.empty(), Optional.of(Set.of("label4")));
+    // ASSERT
+    assertThat(comments, hasSize(1));
+    assertTrue(comments.stream().anyMatch(c -> c.getCommentId().equals(resultUser2.getCommentId())));
+  }
+
+  @Test
+  void getCommentsString_open_search() {
+    // ARRANGE
+    LocalDateTime now = LocalDateTime.now();
+    Random random = new Random();
+    String playerId = "player" + random.nextInt(100000);
+    CommentPost comment = new CommentPost("user1", "player", playerId, "The best!", Set.of("label1", "label2"));
+    Comment resultUser1 = commentService.postComment(comment);
+    comment = new CommentPost("user2", "player", playerId, "The best!", Set.of("label3", "label4"));
+    Comment resultUser2 = commentService.postComment(comment);
+
+    // ACT
+    var comments = commentService.getCommentsString("player", playerId, Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty());
+    // ASSERT
+    assertThat(comments, hasSize(2));
+    assertTrue(comments.stream().anyMatch(c -> c.getCommentId().equals(resultUser1.getCommentId())));
+    assertTrue(comments.stream().anyMatch(c -> c.getCommentId().equals(resultUser2.getCommentId())));
+
+    // ACT
+    comments = commentService.getCommentsString("player", playerId, Optional.of("user1"), Optional.empty(), Optional.empty(), Optional.empty());
+    // ASSERT
+    assertThat(comments, hasSize(1));
+    assertTrue(comments.stream().anyMatch(c -> c.getCommentId().equals(resultUser1.getCommentId())));
+
+    // ACT
+    comments = commentService.getCommentsString("player", playerId, Optional.of("user2"), Optional.empty(), Optional.empty(), Optional.empty());
+    // ASSERT
+    assertThat(comments, hasSize(1));
+    assertTrue(comments.stream().anyMatch(c -> c.getCommentId().equals(resultUser2.getCommentId())));
+
+    // ACT
+    comments = commentService.getCommentsString("player", playerId, Optional.empty(), Optional.empty(), Optional.empty(), Optional.of(Set.of("label1")));
+    // ASSERT
+    assertThat(comments, hasSize(1));
+    assertTrue(comments.stream().anyMatch(c -> c.getCommentId().equals(resultUser1.getCommentId())));
+
+    // ACT
+    comments = commentService.getCommentsString("player", playerId, Optional.empty(), Optional.empty(), Optional.empty(), Optional.of(Set.of("label4")));
+    // ASSERT
+    assertThat(comments, hasSize(1));
+    assertTrue(comments.stream().anyMatch(c -> c.getCommentId().equals(resultUser2.getCommentId())));
+  }
 }

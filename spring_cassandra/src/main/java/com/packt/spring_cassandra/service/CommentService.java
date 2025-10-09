@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.cassandra.core.CassandraTemplate;
 import org.springframework.data.cassandra.core.EntityWriteResult;
 import org.springframework.data.cassandra.core.UpdateOptions;
-import org.springframework.data.cassandra.core.query.ColumnName;
 import org.springframework.data.cassandra.core.query.Criteria;
 import org.springframework.data.cassandra.core.query.CriteriaDefinition;
 import org.springframework.stereotype.Service;
@@ -72,10 +71,10 @@ public class CommentService {
       query += " AND userId='" + userId.get() + "'";
     }
     if (start.isPresent()) {
-      query += " AND date > '" + start.get().toString() + "'";
+      query += " AND date > '" + start.get() + "'";
     }
     if (end.isPresent()) {
-      query += " AND date < '" + end.get().toString() + "'";
+      query += " AND date < '" + end.get() + "'";
     }
     if (labels.isPresent()) {
       for (String label : labels.get()) {
@@ -109,7 +108,7 @@ public class CommentService {
       if (comment != null) {
         Integer currentVotes = comment.getUpvotes();
         logger.info("Current votes: " + currentVotes);
-        EntityWriteResult<Comment> result = null;
+        EntityWriteResult<Comment> result;
 
         if (currentVotes == null) {
           // First upvote: LWT with upvotes IS NULL
@@ -127,7 +126,7 @@ public class CommentService {
           UpdateOptions optionsEqual = UpdateOptions.builder().ifCondition(ifEqual).build();
           result = cassandraTemplate.update(comment, optionsEqual);
         }
-        if (result != null && result.wasApplied()) {
+        if (result.wasApplied()) {
           return result.getEntity();
         }
 

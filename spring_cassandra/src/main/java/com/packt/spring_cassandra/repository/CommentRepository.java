@@ -6,6 +6,7 @@ import org.springframework.data.cassandra.repository.CassandraRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public interface CommentRepository extends CassandraRepository<Comment, String> {
   @AllowFiltering
@@ -15,5 +16,7 @@ public interface CommentRepository extends CassandraRepository<Comment, String> 
 
   @AllowFiltering
   List<Comment> findByLabelsContains(String label);
+
+  Optional<Comment> findByCommentId(String commentId);
 
 }

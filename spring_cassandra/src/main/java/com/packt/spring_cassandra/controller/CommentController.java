@@ -55,4 +55,10 @@ public class CommentController {
       @RequestParam Optional<Set<String>> label) {
     return commentService.getCommentsString(targetType, targetId, userId, start, end, label);
   }
+
+  @PutMapping("{commentId}/upvote")
+  public Comment upvoteComment(@PathVariable String commentId) {
+    return commentService.upvoteComment(commentId);
+  }
+
 }

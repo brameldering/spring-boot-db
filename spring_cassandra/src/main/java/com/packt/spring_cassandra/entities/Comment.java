@@ -24,5 +24,6 @@ public class Comment {
   private String targetId;
   private String content;
   private LocalDateTime date;
-  public Set<String> labels = new HashSet<>();
+  private Set<String> labels = new HashSet<>();
+  private Integer upvotes;
 }
